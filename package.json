@@ -1,0 +1,45 @@
+{
+  "name": "web-framework-benchmark",
+  "version": "1.0.0",
+  "description": "Web Components implementations benchmark",
+  "scripts": {
+    "serve": "node ./tools/server.js",
+    "benchmark:startup": "node tools/benchmark_page-load.js",
+    "benchmark:create": "node tools/benchmark_create-todos.js",
+    "benchmark:delete": "node tools/benchmark_delete-todos.js",
+    "benchmark:edit": "node tools/benchmark_edit-todos.js",
+    "benchmark": "cd tools && ts-node benchmarkRunner.ts",
+    "build:polymer2": "cd polymer2 && polymer2 build",
+    "build:polymer3": "cd polymer3 && polymer build",
+    "build:native": "cd native-shadow-dom && npm run build",
+    "build:angular": "cd angular-elements && npm run build",
+    "build:stencil": "cd stencil && npm run build",
+    "build:vue": "cd vue.js && npm run build",
+    "build:all": "npm run build:native && npm run build:polymer && npm run build:polymer3 && npm run build:angular && npm run build:stencil && npm run build:vue"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vogloblinsky/web-components-benchmark.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vogloblinsky/web-components-benchmark/issues"
+  },
+  "homepage": "https://github.com/vogloblinsky/web-components-benchmark#readme",
+  "devDependencies": {
+    "@types/fs-extra": "^5.0.4",
+    "@types/node": "^8.10.24",
+    "@types/puppeteer": "^1.6.0",
+    "devtools-timeline-model": "^1.4.0",
+    "express": "^4.16.3",
+    "fs-extra": "^7.0.0",
+    "gzip-size-cli": "^3.0.0",
+    "http-server": "^0.11.1",
+    "npm-run-all": "^4.1.3",
+    "puppeteer": "^1.6.2",
+    "spdy": "^3.4.7",
+    "ts-node": "^6.2.0",
+    "typescript": "^3.0.1"
+  }
+}
