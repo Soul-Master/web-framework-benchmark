@@ -1,5 +1,7 @@
 const puppeteer = require('puppeteer');
+const fsx = require('fs-extra');
 
+import * as appServer from './appServer';
 import { BenchmarkBase } from './benchmarkBase';
 import { NativeBenchmark } from './nativeBenchmark';
 import { NativeLitHtmlBenchmark } from './nativeLitHtmlBenchmark';
@@ -8,18 +10,26 @@ import { LitHtmlBenchmark } from './litHtmlBenchmark';
 import { SvelteBenchmark } from './svelteBenchmark';
 import { Polymer2Benchmark } from './polymer2Benchmark';
 import { Polymer3Benchmark } from './polymer3Benchmark';
-import { VueBenchmark } from './vueBenchmark';
 import { LitElementBenchmark } from './litElementBenchmark';
 import { AngularElementsBenchmark } from './angularElementsBenchmark';
+import { setTimeout } from 'timers';
+//import { VueBenchmark } from './vueBenchmark';
 
-const numberOftests = 10,
+const numberOftests = 1,
     inputDelay: number = undefined,
     numberOfCreation = 10,
-    numberOfDeletion = 10,
-    appUrl = 'http://localhost:3000';
+    numberOfDeletion = 10;
 
 (async () => {
-    const browser = await puppeteer.launch({ headless: false });    
+    const tempFolder = __dirname + '/temp';
+    const tempBrowserFolder = tempFolder + '/browser';
+    fsx.removeSync(tempBrowserFolder);
+
+    const server = appServer.start();
+    const browser = await puppeteer.launch({ 
+        headless: false,
+        userDataDir: tempBrowserFolder
+    });    
     const tasks: BenchmarkBase[] = [
         new NativeBenchmark(inputDelay),
         new NativeLitHtmlBenchmark(inputDelay),
@@ -41,9 +51,28 @@ const numberOftests = 10,
 
         b.init();
 
+        let totalPageLoadTime = 0;
+
+        // Warm-up
+        await b.pageLoadTest(browser, 0);
+
+        for (let i = 1; i <= numberOftests; i++) {
+            const time = await b.pageLoadTest(browser, i);
+            console.log(`load: ${time} ms.`);
+
+            totalPageLoadTime += time;
+        }
+
+        const averagePageLoadTime = totalPageLoadTime / numberOftests;
+
+        console.log(`Average time: ${Math.ceil(averagePageLoadTime)} ms\n`);
+
         let totalCreationTime = 0;
 
-        for (let i = 0; i < numberOftests; i++) {
+        // Warm-up
+        await b.creationTest(browser, 5, 0);
+
+        for (let i = 1; i <= numberOftests; i++) {
             const time = await b.creationTest(browser, numberOfCreation, i);
             console.log(`create ${numberOfCreation} items: ${time} ms.`);
 
@@ -56,7 +85,10 @@ const numberOftests = 10,
 
         let totalDeletionTime = 0;
 
-        for (let i = 0; i < numberOftests; i++) {
+        // Warm-up
+        await b.deletionTest(browser, 5, 0);
+
+        for (let i = 1; i <= numberOftests; i++) {
             const time = await b.deletionTest(browser, numberOfDeletion, i);
             console.log(`delete ${numberOfDeletion} items: ${time} ms.`);
 
@@ -69,4 +101,12 @@ const numberOftests = 10,
     }
 
     await browser.close();
+    server.close();
+
+    await new Promise(resolve => {
+        // Wait for closing browser process
+        setTimeout(() => {
+            fsx.removeSync(tempFolder);
+        }, 1000);
+    });
 })();

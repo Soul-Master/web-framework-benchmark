@@ -25,18 +25,33 @@ export abstract class BenchmarkBase {
         fsx.ensureDirSync(this._resultPath);
     }
 
-    async creationTest(browser: Browser, numberOfCreation: number, index: number): Promise<number> {
+    async pageLoadTest(browser: Browser, index: number): Promise<number> {
+        const filename = `${this._resultPath}/pageLoad${index}.json`;
+
         const page = await browser.newPage();
-        const filename = `${this._resultPath}/create${index}.json`;
+        await page.tracing.start({
+            path: filename
+        });
+        
+        await this._openTestPage(page);
+
+        await page.tracing.stop();
+        await page.close();
+
+        return processRawData(filename, index);
+    }
+
+    async creationTest(browser: Browser, numberOfCreation: number, index: number): Promise<number> {
+        const filename = `${this._resultPath}/creation${index}.json`;
         const defaultOptions = {
             delay: this.delay
         };
 
-        await page.goto(LOCALHOST + this.pageUrl);
-
+        const page = await browser.newPage();
         await page.tracing.start({
             path: filename
         });
+        await this._openTestPage(page);
         
         await this._createItems(page, numberOfCreation);
 
@@ -47,16 +62,14 @@ export abstract class BenchmarkBase {
     }
 
     async deletionTest(browser: Browser, numberOfDeletion: number, index: number): Promise<number> {
-        const page = await browser.newPage();
-        const filename = `${this._resultPath}/delete${index}.json`;
+        const filename = `${this._resultPath}/deletion${index}.json`;
         const defaultOptions = {
             delay: this.delay
         };
 
-        await page.goto(LOCALHOST + this.pageUrl);
-
+        const page = await browser.newPage();
+        await this._openTestPage(page);
         await this._createItems(page, numberOfDeletion);
-
         await page.tracing.start({
             path: filename
         });
@@ -71,6 +84,10 @@ export abstract class BenchmarkBase {
         await page.close();
 
         return processRawData(filename, index);
+    }
+
+    async _openTestPage(page: Page) {
+        return await page.goto(LOCALHOST + this.pageUrl);
     }
 
     async _createItems(page: Page, numberOfItem: number) {
