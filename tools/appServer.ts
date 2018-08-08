@@ -1,7 +1,7 @@
-﻿const express = require('express'),
-    http = require('http');
+﻿import express from 'express';
+import http from 'http';
 
-export function start(): any {
+export function start() {
     const app = express();
     app.set('etag', false);
     app.use(express.static('../src'));

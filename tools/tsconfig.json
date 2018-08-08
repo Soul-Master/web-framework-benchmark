@@ -1,20 +1,11 @@
 {
-    "compileOnSave": true,
     "compilerOptions": {
-        "target": "es2017",
         "module": "commonjs",
+        "esModuleInterop": true,
+        "target": "es6",
         "noImplicitAny": true,
-        "noEmit": true,
-        "alwaysStrict": true,
-        "keyofStringsOnly": true,
-        "lib": [
-            "es2017",
-            "dom"
-        ],
         "moduleResolution": "node",
-        "baseUrl": "."
-    },
-    "include": [
-        "**/*" 
-    ]
+        "baseUrl": ".",
+        "noEmit": true
+    }
 }

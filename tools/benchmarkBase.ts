@@ -1,7 +1,5 @@
-const fsx = require('fs-extra');
-const fs = require('fs');
-const TimelineModel = require('devtools-timeline-model');
-
+import fsx from 'fs-extra';
+import TimelineModel from 'devtools-timeline-model';
 import { Browser, Keyboard, Mouse, MouseButtons, ElementHandle, Page } from 'puppeteer';
 
 const LOCALHOST = 'http://localhost:3000';
@@ -104,7 +102,7 @@ export abstract class BenchmarkBase {
 }
 
 function processRawData(filename: string, i: number) {    
-    let events = fs.readFileSync(filename, 'utf8');
+    let events = fsx.readFileSync(filename, 'utf8');
     var model = new TimelineModel(events);
     var topDown = model.topDown();
     

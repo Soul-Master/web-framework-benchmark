@@ -1,6 +1,5 @@
-const puppeteer = require('puppeteer');
-const fsx = require('fs-extra');
-
+import puppeteer from 'puppeteer';
+import fsx from 'fs-extra';
 import * as appServer from './appServer';
 import { BenchmarkBase } from './benchmarkBase';
 import { NativeBenchmark } from './nativeBenchmark';
