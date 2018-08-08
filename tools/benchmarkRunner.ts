@@ -4,6 +4,7 @@ import { BenchmarkBase } from './benchmarkBase';
 import { NativeBenchmark } from './nativeBenchmark';
 import { NativeLitHtmlBenchmark } from './nativeLitHtmlBenchmark';
 import { NativeHyperHtmlBenchmark } from './nativeHyperHtmlBenchmark';
+import { LitHtmlBenchmark } from './litHtmlBenchmark';
 import { SvelteBenchmark } from './svelteBenchmark';
 import { Polymer2Benchmark } from './polymer2Benchmark';
 import { Polymer3Benchmark } from './polymer3Benchmark';
@@ -11,10 +12,10 @@ import { VueBenchmark } from './vueBenchmark';
 import { LitElementBenchmark } from './litElementBenchmark';
 import { AngularElementsBenchmark } from './angularElementsBenchmark';
 
-const numberOftests = 2,
+const numberOftests = 10,
     inputDelay: number = undefined,
-    numberOfCreation = 2,
-    numberOfDeletion = 2,
+    numberOfCreation = 10,
+    numberOfDeletion = 10,
     appUrl = 'http://localhost:3000';
 
 (async () => {
@@ -23,6 +24,7 @@ const numberOftests = 2,
         new NativeBenchmark(inputDelay),
         new NativeLitHtmlBenchmark(inputDelay),
         new NativeHyperHtmlBenchmark(inputDelay),
+        new LitHtmlBenchmark(inputDelay),
         new SvelteBenchmark(inputDelay),
         new Polymer2Benchmark(inputDelay),
         new Polymer3Benchmark(inputDelay),
