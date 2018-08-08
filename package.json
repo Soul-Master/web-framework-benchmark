@@ -3,19 +3,8 @@
   "version": "1.0.0",
   "description": "Web Components implementations benchmark",
   "scripts": {
-    "serve": "node ./tools/server.js",
-    "benchmark:startup": "node tools/benchmark_page-load.js",
-    "benchmark:create": "node tools/benchmark_create-todos.js",
-    "benchmark:delete": "node tools/benchmark_delete-todos.js",
-    "benchmark:edit": "node tools/benchmark_edit-todos.js",
-    "benchmark": "cd tools && ts-node benchmarkRunner.ts",
-    "build:polymer2": "cd polymer2 && polymer2 build",
-    "build:polymer3": "cd polymer3 && polymer build",
-    "build:native": "cd native-shadow-dom && npm run build",
-    "build:angular": "cd angular-elements && npm run build",
-    "build:stencil": "cd stencil && npm run build",
-    "build:vue": "cd vue.js && npm run build",
-    "build:all": "npm run build:native && npm run build:polymer && npm run build:polymer3 && npm run build:angular && npm run build:stencil && npm run build:vue"
+    "serve": "cd tools && ts-node ./serve.ts",
+    "benchmark": "cd tools && ts-node benchmarkRunner.ts"
   },
   "repository": {
     "type": "git",
